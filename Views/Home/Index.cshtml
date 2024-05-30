@@ -1,0 +1,94 @@
+﻿@{
+    var deviceName = "";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<button onclick="sendFunction()">Send</button>
+<button onclick="DeleteFunction()">Delete</button>
+<button onclick="CheckFunction()">Check</button>
+<p id="check" style="font-weight:bold;display:none">@deviceName <span>this your serial no</span></p>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        //var a = "/sdcard/Download/CardioPunChemical"
+        debugger;
+        $.ajax({
+            url: '/Home/ListWindowsDirectories',
+            type: "GET",
+            //data: { androidPath: a },
+            success: function (res) {
+               console.log(res);
+            },
+            error: function () {
+                console.error("An error occurred");
+            }
+        });
+
+        checkAdbPath();
+    });
+    function CheckFunction() {
+        debugger;
+        $.ajax({
+            url: '@Url.Action("CheckDevice", "Home")',
+            type: "GET",
+            success: function (res) {
+                debugger;
+                deviceName=res;
+                $("#check").html(res + " <span>this your serial no</span>").css("display", "block");
+                console.log(deviceName);
+            },
+            error: function () {
+                $("#check").css("display", "none");
+
+                console.error("An error occurred");
+            }
+        });
+    } 
+    
+    function DeleteFunction() {
+        debugger;
+        var path = "/sdcard/Download/CardioPunChemical/Harish";
+        $.ajax({
+            url: '@Url.Action("DeleteFolderOnAndroid", "Home")',
+            type: "GET",
+            data: { folderPath: path },
+            success: function (res) {
+                debugger;
+                console.log(res);
+            },
+            error: function () {
+                console.error("An error occurred");
+            }
+        });
+    }
+    function sendFunction() {
+        debugger;
+        var Androidpath = "/sdcard/Download/CardioPunChemical/999";
+
+        $.ajax({
+            url: '@Url.Action("TransferFolderFromAndroid", "Home")',
+            type: "GET",
+            data: { androidFolderPath :Androidpath},
+            success: function (res) {
+                console.log(res);
+            },
+            error: function () {
+                console.error("An error occurred");
+            }
+        });
+    }
+
+    function checkAdbPath(){
+        $.ajax({
+            url: '@Url.Action("CheckAdbSystem", "Home")',
+            type: "GET",
+            success: function (res) {
+                console.log(res);
+            },
+            error: function () {
+                console.error("An error occurred");
+            }
+        });
+    }
+</script>
